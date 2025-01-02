@@ -36,6 +36,4 @@ jobs:
             sudo docker pull adi2005/week-18-ci-cd:latest
             sudo docker stop week-18-ci-cd || true
             sudo docker rm week-18-ci-cd || true
-            sudo docker run -d --name week-18-ci-cd -p 4000:3000 \
-            --env-file .env \
-            adi2005/week-18-ci-cd:latest
+            sudo docker run -d --name week-18-ci-cd -p 4000:3000 -e DATABASE_URL=${{ secrets.DATABASE_URL }} adi2005/week-18-ci-cd:latest
