@@ -25,4 +25,15 @@ jobs:
           context: .
           file: ./docker/Dockerfile.user
           push: true
-          tags: adi2005/week-18-ci-cd:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/week-18-ci-cd:latest
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker pull adi2005/week-18-ci-cd:latest
+            sudo docker stop week-18-ci-cd || true
+            sudo docker rm week-18-ci-cd || true
+            sudo docker run -d --name week-18-ci-cd -p 4000:4000 adi2005/week-18-ci-cd:latest
